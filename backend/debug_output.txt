@@ -1,0 +1,3 @@
+YOLO conf=0.25 raw detections: 0
+YOLO conf=0.1 raw detections: 5
+DeepSORT tracks total: 5, confirmed: 0

@@ -1,0 +1,8 @@
+flask
+flask-cors
+ultralytics
+opencv-python
+numpy
+deep-sort-realtime
+boto3
+mangum

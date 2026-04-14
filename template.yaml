@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Sentinel View Backend - Lambda Functions for Computer Vision'
+
+Globals:
+  Function:
+    Timeout: 300
+    MemorySize: 2048
+    Runtime: python3.9
+    Environment:
+      Variables:
+        S3_BUCKET_NAME: !Ref UploadBucket
+
+Resources:
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'sentinel-view-uploads-${AWS::StackName}'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  SentinelViewFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.handler
+      CodeUri: lambda/
+      Layers:
+        - !Ref OpenCVLayer
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref UploadBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource: !Sub "${ModelsBucket}/*"
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref UploadBucket
+          MODELS_BUCKET_NAME: !Ref ModelsBucket
+      Events:
+        UploadApi:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        CorsOptions:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: OPTIONS
+
+  OpenCVLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: sentinel-view-opencv
+      Description: OpenCV and other dependencies for computer vision
+      ContentUri: layers/opencv/
+      CompatibleRuntimes:
+        - python3.9
+
+  ModelsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'sentinel-view-models-${AWS::StackName}'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL for Sentinel View"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  UploadBucketName:
+    Description: "S3 bucket for uploaded files"
+    Value: !Ref UploadBucket
+  ModelsBucketName:
+    Description: "S3 bucket for ML models"
+    Value: !Ref ModelsBucket

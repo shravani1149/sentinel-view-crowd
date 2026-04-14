@@ -1,0 +1,9 @@
+Size: 640, Conf: 0.05, Detections: 0
+Size: 640, Conf: 0.1, Detections: 0
+Size: 640, Conf: 0.25, Detections: 0
+Size: 1280, Conf: 0.05, Detections: 14
+Size: 1280, Conf: 0.1, Detections: 5
+Size: 1280, Conf: 0.25, Detections: 0
+Size: 1920, Conf: 0.05, Detections: 63
+Size: 1920, Conf: 0.1, Detections: 17
+Size: 1920, Conf: 0.25, Detections: 2
