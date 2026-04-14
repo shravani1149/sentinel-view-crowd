@@ -901,5 +901,13 @@ def health():
             "mediaType": current_stats["mediaType"]
         })
 
+@app.route('/test')
+def test():
+    return jsonify({
+        "message": "Backend is working",
+        "cors": "enabled",
+        "timestamp": time.strftime("%H:%M:%S")
+    })
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, threaded=True)
