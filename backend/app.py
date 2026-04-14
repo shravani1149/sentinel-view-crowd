@@ -11,11 +11,7 @@ from deep_sort_realtime.deepsort_tracker import DeepSort
 import numpy as np
 
 app = Flask(__name__)
-CORS(app, origins=[
-    "https://sentinel-view-crowd-2o63.vercel.app",
-    "https://localhost:5173",
-    "https://localhost:3000"
-])
+CORS(app, origins="*")
 
 # Configuration
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
