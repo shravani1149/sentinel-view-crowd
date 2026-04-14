@@ -7,7 +7,7 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://your-backend-url.com/api/:splat"
+  to = "https://sentinel-view-backend.onrender.com/:splat"
   status = 200
 
 [[headers]]
